@@ -86,7 +86,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     mServiceIntent = new Intent(this, StockIntentService.class);
     if (savedInstanceState == null){
       // Run the initialize task service so that some stocks appear upon an empty database
-      mServiceIntent.putExtra("tag", "init");
+      mServiceIntent.putExtra(getString(R.string.tag), "init");
       if (isConnected){
         startService(mServiceIntent);
       } else{
@@ -132,15 +132,15 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                       new String[] { input.toString() }, null);
                   if (c.getCount() != 0) {
                     Toast toast =
-                        Toast.makeText(MyStocksActivity.this, "This stock is already saved!",
+                        Toast.makeText(MyStocksActivity.this, getString(R.string.symbol_found),
                             Toast.LENGTH_LONG);
                     toast.setGravity(Gravity.CENTER, Gravity.CENTER, 0);
                     toast.show();
                     return;
                   }else {
                     // Add the stock to DB
-                    mServiceIntent.putExtra("tag", "add");
-                    mServiceIntent.putExtra("symbol", input.toString());
+                    mServiceIntent.putExtra(getString(R.string.tag), getString(R.string.add));
+                    mServiceIntent.putExtra(getString(R.string.symbol), input.toString());
                     startService(mServiceIntent);
                   }
 
@@ -163,7 +163,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     if (isConnected){
       long period = 3600L;
       long flex = 10L;
-      String periodicTag = "periodic";
+      String periodicTag = getString(R.string.periodic);;
 
       // create a periodic task to pull stocks once every hour after the app has been opened. This
       // is so Widget data stays up to date.
@@ -258,19 +258,11 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     String startDate = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
     Date currentDate = new Date();
     String endDate = new SimpleDateFormat("yyyy-MM-dd").format(currentDate);
-    Intent mServiceIntent = new Intent(getApplicationContext(), FetchYQLDataService.class);
+    Intent mServiceIntent = new Intent(this, FetchYQLDataService.class);
     mServiceIntent.putExtra(FetchYQLDataService.SYMBOL, symbol);
     mServiceIntent.putExtra(FetchYQLDataService.START_DATE, startDate);
     mServiceIntent.putExtra(FetchYQLDataService.END_DATE, endDate);
-    getApplicationContext().startService(mServiceIntent);
-    if(symbolItemArrayList != null){
-      Intent intent  = new Intent(getApplicationContext(), GraphActivity.class);
-      Bundle bundle = new Bundle();
-      bundle.putParcelableArrayList(FetchYQLDataService.SYMBOLS, symbolItemArrayList);
-      intent.putExtra(FetchYQLDataService.EXTRAS_BUNDLE, bundle);
-      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-      startActivity(intent);
-    }
+    startService(mServiceIntent);
   }
 
 
@@ -279,7 +271,10 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     @Override
     public void onReceive(Context context, Intent intent) {
       Bundle bundle = intent.getBundleExtra(FetchYQLDataService.EXTRAS_BUNDLE);
-      symbolItemArrayList = bundle.getParcelableArrayList(FetchYQLDataService.SYMBOLS);
+      Intent newIntent = new Intent(context, GraphActivity.class);
+      newIntent.putExtra(FetchYQLDataService.EXTRAS_BUNDLE, bundle);
+      newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      context.startActivity(newIntent);
     }
   }
 

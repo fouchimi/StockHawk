@@ -76,12 +76,10 @@ public class GraphActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "Flushing GraphActivity", Toast.LENGTH_LONG).show();
         if(chart != null){
             chart.clearValues();
             chart.clear();
             chart = null;
-            Toast.makeText(this, "Flushing GraphActivity" + chart, Toast.LENGTH_LONG).show();
         }
     }
 }

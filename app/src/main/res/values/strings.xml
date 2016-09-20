@@ -14,4 +14,10 @@
     <string name="stock_symbol">Stock Symbol: <xliff:g id="stock_symbol">%1$s</xliff:g></string>
     <string name="bid_price">Bid Price: <xliff:g id="bid_price">%1$s</xliff:g></string>
     <string name="percent_change">Percent Change: <xliff:g id="pecent_change">%1$s</xliff:g></string>
+    <string name="float_btn">Floating button</string>
+    <string name="symbol_found">This stock is already saved!</string>
+    <string name="symbol">symbol</string>
+    <string name="tag">tag</string>
+    <string name="add">add</string>
+    <string name="periodic">periodic</string>
 </resources>
