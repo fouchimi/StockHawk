@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -31,6 +32,7 @@ public class GraphActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
         chart = (LineChart) findViewById(R.id.chart);
+
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTextSize(10f);
@@ -71,4 +73,15 @@ public class GraphActivity extends Activity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(this, "Flushing GraphActivity", Toast.LENGTH_LONG).show();
+        if(chart != null){
+            chart.clearValues();
+            chart.clear();
+            chart = null;
+            Toast.makeText(this, "Flushing GraphActivity" + chart, Toast.LENGTH_LONG).show();
+        }
+    }
 }

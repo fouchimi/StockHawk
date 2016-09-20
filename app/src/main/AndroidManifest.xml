@@ -46,7 +46,13 @@
             android:authorities="com.sam_chordas.android.stockhawk.data.QuoteProvider"
             android:exported="false" />
 
-        <activity android:name=".ui.GraphActivity"></activity>
+        <activity android:name=".ui.GraphActivity"
+            android:launchMode="singleTask"
+            android:parentActivityName=".ui.MyStocksActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.MyStocksActivity" />
+        </activity>
         <receiver android:name=".data.SymbolWidgetProvider">
 
             <intent-filter>

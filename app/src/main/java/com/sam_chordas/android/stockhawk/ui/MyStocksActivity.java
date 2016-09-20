@@ -49,7 +49,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class MyStocksActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+public class MyStocksActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, GetClickedStock{
 
   /**
    * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -108,26 +108,8 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
             new RecyclerViewItemClickListener.OnItemClickListener() {
               @Override public void onItemClick(View v, int position) {
                 Cursor c = mCursorAdapter.getCursor();
-                c.moveToPosition(position);
-                String symbol = c.getString(c.getColumnIndex(QuoteColumns.SYMBOL));
-                Calendar cal = Calendar.getInstance();
-                cal.add(Calendar.MONTH, -1);
-                String startDate = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
-                Date currentDate = new Date();
-                String endDate = new SimpleDateFormat("yyyy-MM-dd").format(currentDate);
-                Intent mServiceIntent = new Intent(getApplicationContext(), FetchYQLDataService.class);
-                mServiceIntent.putExtra(FetchYQLDataService.SYMBOL, symbol);
-                mServiceIntent.putExtra(FetchYQLDataService.START_DATE, startDate);
-                mServiceIntent.putExtra(FetchYQLDataService.END_DATE, endDate);
-                getApplicationContext().startService(mServiceIntent);
-                if(symbolItemArrayList != null){
-                  Intent intent  = new Intent(getApplicationContext(), GraphActivity.class);
-                  Bundle bundle = new Bundle();
-                  bundle.putParcelableArrayList(FetchYQLDataService.SYMBOLS, symbolItemArrayList);
-                  intent.putExtra(FetchYQLDataService.EXTRAS_BUNDLE, bundle);
-                  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                  getApplicationContext().startActivity(intent);
-                }
+                MyStocksActivity myStocksActivity = (MyStocksActivity) mContext;
+                myStocksActivity.getCursor(c, position);
               }
             }));
     recyclerView.setAdapter(mCursorAdapter);
@@ -265,6 +247,30 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
   @Override
   public void onLoaderReset(Loader<Cursor> loader){
     mCursorAdapter.swapCursor(null);
+  }
+
+  @Override
+  public void getCursor(Cursor c, int position) {
+    c.moveToPosition(position);
+    String symbol = c.getString(c.getColumnIndex(QuoteColumns.SYMBOL));
+    Calendar cal = Calendar.getInstance();
+    cal.add(Calendar.MONTH, -1);
+    String startDate = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
+    Date currentDate = new Date();
+    String endDate = new SimpleDateFormat("yyyy-MM-dd").format(currentDate);
+    Intent mServiceIntent = new Intent(getApplicationContext(), FetchYQLDataService.class);
+    mServiceIntent.putExtra(FetchYQLDataService.SYMBOL, symbol);
+    mServiceIntent.putExtra(FetchYQLDataService.START_DATE, startDate);
+    mServiceIntent.putExtra(FetchYQLDataService.END_DATE, endDate);
+    getApplicationContext().startService(mServiceIntent);
+    if(symbolItemArrayList != null){
+      Intent intent  = new Intent(getApplicationContext(), GraphActivity.class);
+      Bundle bundle = new Bundle();
+      bundle.putParcelableArrayList(FetchYQLDataService.SYMBOLS, symbolItemArrayList);
+      intent.putExtra(FetchYQLDataService.EXTRAS_BUNDLE, bundle);
+      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+      startActivity(intent);
+    }
   }
 
 
