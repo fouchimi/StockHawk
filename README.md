@@ -2,6 +2,8 @@
 The app currently finds stock prices from the internet and allows users to add stocks to track
 
 <h2>Installation</h2>
+$git clone https://github.com/fouchimi/StockHawk.git
+
 On Linux and Mac OS, you can open the project on Android Studio and run <b>./gradlew assembleDebug</b> and <b>adb -d install 
 app/{path-to-your-apk}</b> which is often app/build/outputs/apk/{apk_file}.
 
