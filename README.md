@@ -11,4 +11,5 @@ Alternatively you can simply click on the run button of the IDE and those steps 
 on your mobile or virtual device
 
 <h2>Library</h2>
-I have used <a href="https://github.com/PhilJay/MPAndroidChart/wiki/Getting-Started">MPAndroidChart</a> to draw the graph.
+I have used <a href="https://github.com/PhilJay/MPAndroidChart/wiki/Getting-Started">MPAndroidChart</a> to draw the graph. You can 
+check check this <a href="https://github.com/PhilJay/MPAndroidChart/wiki/Getting-Started">link</a> to get started.
